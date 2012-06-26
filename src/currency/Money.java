@@ -3,7 +3,6 @@ package currency;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import currency.exceptions.DecimalInputOutOfRange;
 import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
