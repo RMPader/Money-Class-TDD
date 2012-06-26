@@ -34,23 +34,31 @@ public class MoneyOperationTest {
     }
 
     @Test
-    public void signedAddition() {
+    public void negativePositiveAddition() {
 	Money augend = new Money(Currency.EUR, "-1.20");
 	Money addend = new Money(Currency.EUR, "1.01");
 	Money result = augend.add(addend);
 	Money expected = new Money(Currency.EUR, "-0.19");
 	assertEquals(expected, result);
-
-	augend = new Money(Currency.EUR, "2.01");
-	addend = new Money(Currency.EUR, "-4.01");
-	result = augend.add(addend);
-	expected = new Money(Currency.EUR, "-2.00");
+    }
+    
+    @Test
+    public void positiveNegativeAddition()
+    {
+	Money augend = new Money(Currency.EUR, "2.01");
+	Money addend = new Money(Currency.EUR, "-4.01");
+	Money result = augend.add(addend);
+	Money expected = new Money(Currency.EUR, "-2.00");
 	assertEquals(expected, result);
-
-	augend = new Money(Currency.EUR, "1.99");
-	addend = new Money(Currency.EUR, "4.21");
-	result = augend.add(addend);
-	expected = new Money(Currency.EUR, "6.20");
+    }
+    
+    @Test
+    public void negativeNegativeAddition()
+    {
+	Money augend = new Money(Currency.EUR, "-1.99");
+	Money addend = new Money(Currency.EUR, "-4.21");
+	Money result = augend.add(addend);
+	Money expected = new Money(Currency.EUR, "-6.20");
 	assertEquals(expected, result);
     }
 
@@ -157,19 +165,31 @@ public class MoneyOperationTest {
     }
 
     @Test
-    public void nonEqualityTests() {
+    public void sameCurrencyDifferentValuePhpEquality() {
 	Money php1 = new Money(Currency.PHP, "14.00");
 	Money php2 = new Money(Currency.PHP, "14.02");
 	assertFalse(php1.equals(php2));
-
+    }
+    
+    @Test
+    public void sameCurrencyDifferentValueEurEquality()
+    {
 	Money eur1 = new Money(Currency.EUR, "0.23");
 	Money eur2 = new Money(Currency.EUR, "0.22");
 	assertFalse(eur1.equals(eur2));
-
+    }
+    
+    @Test
+    public void sameCurrencyDifferentValueUsdEquality()
+    {
 	Money usd1 = new Money(Currency.USD, "1.55");
 	Money usd2 = new Money(Currency.USD, "2.55");
 	assertFalse(usd1.equals(usd2));
-
+    }
+    
+    @Test
+    public void differentCurrencyEquality()
+    {
 	Money m1 = new Money(Currency.USD, "1.11");
 	Money m2 = new Money(Currency.PHP, "1.12");
 	assertFalse(m1.equals(m2));
