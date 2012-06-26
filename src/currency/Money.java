@@ -47,24 +47,6 @@ public class Money {
     private static final int MONEY_VALUE_DECIMAL_NUMBER_INDEX = 1;
     private static final int DECIMAL_PRECISION = 2;
 
-    private static final int MONEY_CURRENCY_INDEX = 0;
-    private static final int MONEY_VALUE_INDEX = 1;
-
-    private static StringBuilder createMoneyTypeExceptionMessage(
-	    String suspectString) {
-	StringBuilder errorMessage = new StringBuilder(suspectString);
-	errorMessage.append(", type can only be ");
-	return appendCurrencyTypes(errorMessage);
-    }
-
-    private static StringBuilder appendCurrencyTypes(StringBuilder errorMessage) {
-	for (Currency type : Currency.values()) {
-	    errorMessage.append(type.toString());
-	    errorMessage.append(",");
-	}
-	return errorMessage.append(".");
-    }
-
     private static int extractWholeNumber(String valuePart) {
 	String splitValue[] = valuePart.split("\\.");
 	if (splitValue.length > 2) {
