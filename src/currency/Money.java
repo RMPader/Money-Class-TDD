@@ -48,7 +48,7 @@ public class Money {
 	return createMoney(currency, productWholeNumber, productDecimal);
     }
 
-    public Money divide(float dividend) {
+    public Money divide(double dividend) {
 	if (dividend == 0) {
 	    throw new ArithmeticException("Division by zero.");
 	}
@@ -64,7 +64,6 @@ public class Money {
 	DecimalFormat doubleRep = new DecimalFormat("0.00");
 	doubleRep.setRoundingMode(RoundingMode.HALF_UP);
 	String sb = doubleRep.format(result);
-	System.out.println(sb);
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));

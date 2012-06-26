@@ -132,6 +132,25 @@ public class MoneyOperationTest {
 	Money expected = new Money(Currency.PHP,0,50);
 	assertEquals(expected, result);
     }
+    
+    @Test
+    public void multiplyDecimalByDecimal()
+    {
+	Money multiplier = new Money(Currency.PHP,0,6);
+	Money result = multiplier.multiply(.5);
+	Money expected = new Money(Currency.PHP,0,3);
+	assertEquals(expected, result);
+    }
+    
+    @Test
+    public void divideDecimalByDecimal()
+    {
+	Money dividend = new Money(Currency.PHP,0,6);
+	Money result = dividend.divide(.5);
+	Money expected = new Money(Currency.PHP,0,12);
+	assertEquals(expected, result);
+    }
+    
     @Test
     public void muliplyByZero() {
 	Money factor = new Money(Currency.USD, 1, 0);
