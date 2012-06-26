@@ -73,7 +73,7 @@ public class MoneyOperationTest {
 	minuend = new Money(Currency.EUR, -5, -9);
 	subtrahend = new Money(Currency.EUR, -6, -1);
 	result = minuend.subtract(subtrahend);
-	expected = new Money(Currency.EUR, 1, 8);
+	expected = new Money(Currency.EUR, 0, 92);
 	assertEquals(expected, result);
     }
     
@@ -106,7 +106,7 @@ public class MoneyOperationTest {
 	Money minuend = new Money(Currency.USD, 1, 3);
 	Money subtrahend = new Money(Currency.USD, 0, 5);
 	Money result = minuend.subtract(subtrahend);
-	Money expected = new Money(Currency.USD, 0, 8);
+	Money expected = new Money(Currency.USD, 0, 98);
 	assertEquals(expected, result);
 
 	minuend = new Money(Currency.EUR, 1, 10);

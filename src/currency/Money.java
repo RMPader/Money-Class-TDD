@@ -173,9 +173,21 @@ public class Money {
 	checkisSameCurrency(subtrahend);
 	int wholeNumber = this.wholeNumber - subtrahend.wholeNumber;
 	int decimalNumber = this.decimalNumber - subtrahend.decimalNumber;
-	decimalNumber *= -1;
-	System.out.println(wholeNumber + "." + decimalNumber);
+	if (mustBorrow(subtrahend.decimalNumber))
+	    if (decimalNumber < 0) {
+		int borrow = 100;
+		wholeNumber--;
+		decimalNumber = Math.abs(decimalNumber + borrow);
+	    }
+	if (wholeNumber > 0 && decimalNumber < 0) {
+	    decimalNumber *= -1;
+	}
 	return new Money(currency, wholeNumber, decimalNumber);
+    }
+
+    private boolean mustBorrow(int decimalNumber) {
+	return this.wholeNumber > 0
+		|| (this.wholeNumber < 0 && decimalNumber < 0);
     }
 
     private static StringBuilder concatAll(String... strings) {
