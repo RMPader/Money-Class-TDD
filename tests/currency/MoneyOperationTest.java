@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import currency.exceptions.IncompatibleCurrencyException;
+import currency.Exceptions.IncompatibleCurrencyException;
 
 public class MoneyOperationTest {
 
@@ -14,9 +14,9 @@ public class MoneyOperationTest {
 	Money usd = new Money(Currency.USD, 0, 1);
 	Money eur = new Money(Currency.EUR, -1, 0);
 
-	assertEquals(php.toString(),("PHP 1.00"));
-	assertEquals(usd.toString(),("USD 0.01"));
-	assertEquals(eur.toString(),("EUR -1.00"));
+	assertTrue(php.toString().equals("PHP 1.00"));
+	assertTrue(usd.toString().equals("USD 0.01"));
+	assertTrue(eur.toString().equals("EUR -1.00"));
     }
 
     @Test
@@ -25,9 +25,9 @@ public class MoneyOperationTest {
 	Money usd = new Money(Currency.USD, 0, -1);
 	Money eur = new Money(Currency.EUR, -1, 0);
 
-	assertEquals(php.getValue(),("1.00"));
-	assertEquals(usd.getValue(),("-0.01"));
-	assertEquals(eur.getValue(),("-1.00"));
+	assertTrue(php.getValue().equals("1.00"));
+	assertTrue(usd.getValue().equals("-0.01"));
+	assertTrue(eur.getValue().equals("-1.00"));
     }
 
     @Test

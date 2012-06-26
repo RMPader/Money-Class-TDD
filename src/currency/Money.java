@@ -3,6 +3,7 @@ package currency;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import currency.Exceptions.DecimalInputOutOfRange;
 import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
@@ -15,6 +16,7 @@ public class Money {
 
     public Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
+	checkDecimalOutOfRange(decimalNumber);
 	long sign = wholeNumber * decimalNumber;
 	if (sign < 0) {
 	    throw new InvalidMoneyValueException(
@@ -31,13 +33,22 @@ public class Money {
 	}
     }
 
+    public void checkDecimalOutOfRange(int decimalNumber) {
+	if (decimalNumber >= 100) {
+	    StringBuilder message = concatAll("invalid decimal: ",
+		    String.valueOf(decimalNumber),
+		    " must be within range of 1 to 99");
+	    throw new DecimalInputOutOfRange(message.toString());
+	}
+    }
+
     public Money multiply(double multiplicand) {
 	double productWholeNumber = ((double) wholeNumber) * multiplicand;
 	double productDecimal = ((double) decimalNumber) * multiplicand;
 	return createMoney(currency, productWholeNumber, productDecimal);
     }
 
-    public Money divide(float dividend) {
+    public Money divide(double dividend) {
 	if (dividend == 0) {
 	    throw new ArithmeticException("Division by zero.");
 	}
