@@ -1,4 +1,4 @@
-package currency.Exceptions;
+package currency.exceptions;
 
 @SuppressWarnings("serial")
 public class DecimalInputOutOfRange extends RuntimeException {

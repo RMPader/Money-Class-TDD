@@ -5,12 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 <<<<<<< HEAD
+import currency.exceptions.IncompatibleCurrencyException;
 =======
-import currency.Currency;
-import currency.Money;
 import currency.Exceptions.IncompatibleCurrencyException;
+>>>>>>> ca9279647ebfb3420486470929d70b247313b62c
 
->>>>>>> e70d5bd8d66088e7344319ad14dbf685d26c0192
 public class MoneyOperationTest {
 
     @Test
@@ -19,9 +18,9 @@ public class MoneyOperationTest {
 	Money usd = new Money(Currency.USD, 0, 1);
 	Money eur = new Money(Currency.EUR, -1, 0);
 
-	assertTrue(php.toString().equals("PHP 1.00"));
-	assertTrue(usd.toString().equals("USD 0.01"));
-	assertTrue(eur.toString().equals("EUR -1.00"));
+	assertEquals(php.toString(),("PHP 1.00"));
+	assertEquals(usd.toString(),("USD 0.01"));
+	assertEquals(eur.toString(),("EUR -1.00"));
     }
 
     @Test
@@ -30,14 +29,11 @@ public class MoneyOperationTest {
 	Money usd = new Money(Currency.USD, 0, -1);
 	Money eur = new Money(Currency.EUR, -1, 0);
 
-	assertTrue(php.getValue().equals("1.00"));
-	assertTrue(usd.getValue().equals("-0.01"));
-	assertTrue(eur.getValue().equals("-1.00"));
+	assertEquals(php.getValue(),("1.00"));
+	assertEquals(usd.getValue(),("-0.01"));
+	assertEquals(eur.getValue(),("-1.00"));
     }
 
-<<<<<<< HEAD
-    @Test
-=======
     @Test
     public void sameCurrencyAddition() {
 	Money augend = new Money(Currency.EUR, 1, 20);
@@ -119,8 +115,61 @@ public class MoneyOperationTest {
 	augend.subtract(addend);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void divisionByZero() {
+	Money dividend = new Money(Currency.EUR, 1, 0);
+	dividend.divide(0);
+    }
+
     @Test
->>>>>>> e70d5bd8d66088e7344319ad14dbf685d26c0192
+    public void divideByOne() {
+	Money dividend = new Money(Currency.EUR, 23, 10);
+	Money assumedResult = new Money(Currency.EUR, 23, 10);
+	assertTrue(dividend.divide(1).equals(assumedResult));
+    }
+
+    @Test
+    public void multiplyByDecimal()
+    {
+	Money multiplier = new Money(Currency.PHP,1,0);
+	Money result = multiplier.multiply((double).5);
+	Money expected = new Money(Currency.PHP,0,50);
+	assertEquals(expected, result);
+    }
+    
+    @Test
+    public void multiplyDecimalByDecimal()
+    {
+	Money multiplier = new Money(Currency.PHP,0,6);
+	Money result = multiplier.multiply(.5);
+	Money expected = new Money(Currency.PHP,0,3);
+	assertEquals(expected, result);
+    }
+    
+    @Test
+    public void divideDecimalByDecimal()
+    {
+	Money dividend = new Money(Currency.PHP,0,6);
+	Money result = dividend.divide(.5);
+	Money expected = new Money(Currency.PHP,0,12);
+	assertEquals(expected, result);
+    }
+    
+    @Test
+    public void muliplyByZero() {
+	Money factor = new Money(Currency.USD, 1, 0);
+	Money assumedResult = new Money(Currency.USD, 0, 0);
+	assertTrue(factor.multiply(0).equals(assumedResult));
+    }
+
+    @Test
+    public void muliplyByOne() {
+	Money factor = new Money(Currency.USD, 12, 34);
+	Money assumedResult = new Money(Currency.USD, 12, 34);
+	assertTrue(factor.multiply(1).equals(assumedResult));
+    }
+    
+    @Test
     public void nonEqualityTests() {
 	Money php1 = new Money(Currency.PHP, 14, 0);
 	Money php2 = new Money(Currency.PHP, 14, 2);
@@ -173,32 +222,5 @@ public class MoneyOperationTest {
 	assertTrue(money1.equals(money2) && money2.equals(money3)
 		&& money1.equals(money3)
 		&& money1.hashCode() == money3.hashCode());
-    }
-
-    @Test(expected = ArithmeticException.class)
-    public void divisionByZero() {
-	Money dividend = new Money(Currency.EUR, 1, 0);
-	dividend.divide(0);
-    }
-
-    @Test
-    public void divideByOne() {
-	Money dividend = new Money(Currency.EUR, 23, 10);
-	Money assumedResult = new Money(Currency.EUR, 23, 10);
-	assertTrue(dividend.divide(1).equals(assumedResult));
-    }
-
-    @Test
-    public void muliplyByZero() {
-	Money factor = new Money(Currency.USD, 1, 0);
-	Money assumedResult = new Money(Currency.USD, 0, 0);
-	assertTrue(factor.multiply(0).equals(assumedResult));
-    }
-
-    @Test
-    public void muliplyByOne() {
-	Money factor = new Money(Currency.USD, 12, 34);
-	Money assumedResult = new Money(Currency.USD, 12, 34);
-	assertTrue(factor.multiply(1).equals(assumedResult));
     }
 }
