@@ -4,10 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+<<<<<<< HEAD
+=======
 import currency.Currency;
 import currency.Money;
 import currency.Exceptions.IncompatibleCurrencyException;
 
+>>>>>>> added test case for addition and subtraction
 public class MoneyOperationTest {
 
     @Test
@@ -22,6 +25,7 @@ public class MoneyOperationTest {
     }
 
     @Test
+<<<<<<< HEAD
     public void valueTests() {
 	Money php = new Money(Currency.PHP, 1, 0);
 	Money usd = new Money(Currency.USD, 0, -1);
@@ -32,7 +36,7 @@ public class MoneyOperationTest {
 	assertTrue(eur.getValue().equals("-1.00"));
     }
 
-    @Test
+=======
     public void sameCurrencyAddition() {
 	Money augend = new Money(Currency.EUR, 1, 20);
 	Money addend = new Money(Currency.EUR, 1, 1);
@@ -112,7 +116,8 @@ public class MoneyOperationTest {
 	Money addend = new Money(Currency.USD, 1, 1);
 	augend.subtract(addend);
     }
-
+    
+>>>>>>> added test case for addition and subtraction
     @Test
     public void nonEqualityTests() {
 	Money php1 = new Money(Currency.PHP, 14, 0);
