@@ -43,14 +43,9 @@ public class Money {
 	    throw new InvalidMoneyValueException(valuePart
 		    + " has higher precision. Expected is 2 (e.g 1.00, 30.01)");
 	}
-	int decimal = Integer.parseInt(decimalFromInput);
-	if (valuePart.charAt(0) == '-') {
-	    decimal *= -1;
-	}
+	int decimal = transformDecimal(valuePart.charAt(0),decimalFromInput);
 	return decimal;
     }
-    
-    
 
     private static String extractDecimalFromInput(String value) {
 	String[] splitValue = value.split("\\.");
@@ -61,6 +56,13 @@ public class Money {
 	return decimalFromInput;
     }
 
+    private static int transformDecimal(char sign, String decimalString){
+	int decimal = Integer.parseInt(decimalString);
+	if (sign == '-') {
+	    decimal *= -1;
+	}
+	return decimal;
+    }
     private static boolean decimalPrecisionIsMoreThanTwo(String decimalNumber) {
 	return decimalNumber.length() > DECIMAL_PRECISION;
     }
@@ -105,7 +107,7 @@ public class Money {
 	checkisSameCurrency(addend);
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
-	if (decimalNumber >= 100) {
+	if (Math.abs(decimalNumber) >= 100) {
 	    wholeNumber = wholeNumber + (decimalNumber / 100);
 	    decimalNumber = decimalNumber % 100;
 	}
