@@ -16,17 +16,18 @@ public class Money {
     public Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
 	long sign = wholeNumber * decimalNumber;
-	if(sign < 0){
-	    throw new InvalidMoneyValueException(" both arguments have non-zero values that are different in sign.");
+	if (sign < 0) {
+	    throw new InvalidMoneyValueException(
+		    " both arguments have non-zero values that are different in sign.");
 	} else {
-	if(wholeNumber < 0 || decimalNumber < 0){
-	    hasNegativeValue = true;
-	} else { 
-	    hasNegativeValue = false;
-	}
-	this.currency = currency;
-	this.wholeNumber = wholeNumber;
-	this.decimalNumber = decimalNumber;
+	    if (wholeNumber < 0 || decimalNumber < 0) {
+		hasNegativeValue = true;
+	    } else {
+		hasNegativeValue = false;
+	    }
+	    this.currency = currency;
+	    this.wholeNumber = wholeNumber;
+	    this.decimalNumber = decimalNumber;
 	}
     }
 
@@ -64,7 +65,7 @@ public class Money {
 	return productWholeNumber + (productDecimal / 100);
     }
 
-   public Money add(Money addend) {
+    public Money add(Money addend) {
 	checkisSameCurrency(addend);
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
@@ -77,7 +78,8 @@ public class Money {
 
     public void checkisSameCurrency(Money money) {
 	if (currency != money.currency) {
-	    StringBuilder sb = concatAll("cannot perform operation on ", currency.toString(), " and ", money.currency.toString());
+	    StringBuilder sb = concatAll("cannot perform operation on ",
+		    currency.toString(), " and ", money.currency.toString());
 	    String message = sb.toString();
 	    throw new IncompatibleCurrencyException(message);
 	}
@@ -96,11 +98,7 @@ public class Money {
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
     }
-    
-    
-    
-    
-    
+
     private static StringBuilder concatAll(String... strings) {
 	StringBuilder newString = new StringBuilder();
 	for (String s : strings) {
@@ -119,7 +117,7 @@ public class Money {
 	if (decimalNumber < 10) {
 	    value.insert(value.indexOf(".") + 1, '0');
 	}
-	if(hasNegativeValue){
+	if (hasNegativeValue) {
 	    value.insert(0, '-');
 	}
 	return value.toString();
