@@ -1,4 +1,3 @@
-//
 package currency;
 
 import static org.junit.Assert.*;
