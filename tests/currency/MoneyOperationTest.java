@@ -44,7 +44,7 @@ public class MoneyOperationTest {
 	augend = new Money(Currency.EUR, 2, 1);
 	addend = new Money(Currency.EUR, -4, -2);
 	result = augend.add(addend);
-	expected = new Money(Currency.EUR, -3, -1);
+	expected = new Money(Currency.EUR, -2, -1);
 	assertEquals(expected, result);
 	
 	augend = new Money(Currency.EUR, -1, -2);

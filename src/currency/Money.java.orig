@@ -3,7 +3,7 @@ package currency;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import currency.exceptions.DecimalInputOutOfRange;
+import currency.Exceptions.DecimalInputOutOfRange;
 import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
@@ -25,10 +25,10 @@ public class Money {
 	}
 	this.currency = currency;
 	this.wholeNumber = wholeNumber;
-	this.decimalNumber = decimalNumber;
+	this.decimalNumber = Math.abs(decimalNumber);
     }
 
-    private void checkDecimalOutOfRange(int decimalNumber) {
+    public void checkDecimalOutOfRange(int decimalNumber) {
 	if (decimalNumber >= 100) {
 	    StringBuilder message = concatAll("invalid decimal: ",
 		    String.valueOf(decimalNumber),
@@ -37,7 +37,11 @@ public class Money {
 	}
     }
 
+<<<<<<< HEAD
     private void checkSimilarSign(int whole, int decimal) {
+=======
+private void checkSimilarSign(int whole, int decimal){
+>>>>>>> added signed subtraction test cases
 	long sign = wholeNumber * decimalNumber;
 	if (sign < 0) {
 	    throw new InvalidMoneyValueException(
@@ -70,9 +74,13 @@ public class Money {
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
-	if(whole==0 && result < 0){
+<<<<<<< HEAD
+
+	if (whole == 0 && result < 0) {
 	    decimal *= -1;
 	}
+=======
+>>>>>>> added signed subtraction test cases
 	return new Money(currency, whole, decimal);
     }
 
