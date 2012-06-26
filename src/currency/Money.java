@@ -105,20 +105,21 @@ public class Money {
 	checkisSameCurrency(subtrahend);
 	int wholeNumber = this.wholeNumber - subtrahend.wholeNumber;
 	int decimalNumber = this.decimalNumber - subtrahend.decimalNumber;
-	if (this.decimalNumber > 0 || this.decimalNumber > 0
-		&& subtrahend.decimalNumber > 0) {
+	if (mustBorrow(subtrahend.decimalNumber))
 	    if (decimalNumber < 0) {
 		int borrow = 100;
-		if (this.decimalNumber < 10)
-		    borrow = 10;
 		wholeNumber--;
 		decimalNumber = Math.abs(decimalNumber + borrow);
 	    }
-	}
 	if (wholeNumber > 0 && decimalNumber < 0) {
 	    decimalNumber *= -1;
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
+    }
+
+    private boolean mustBorrow(int decimalNumber) {
+	return this.wholeNumber > 0
+		|| (this.wholeNumber < 0 && decimalNumber < 0);
     }
 
     private static StringBuilder concatAll(String... strings) {
