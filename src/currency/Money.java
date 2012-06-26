@@ -1,6 +1,8 @@
 package currency;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
@@ -18,7 +20,7 @@ public class Money {
 	    hasNegativeValue = (decimalNumber < 0) ? true : false;
 	} else if (wholeNumber < 0) {
 	    hasNegativeValue = true;
-	} else{
+	} else {
 	    hasNegativeValue = false;
 	}
 	this.currency = currency;
@@ -29,15 +31,16 @@ public class Money {
     public Money multiply(double multiplicand) {
 	double productWholeNumber = ((double) wholeNumber) * multiplicand;
 	double productDecimal = ((double) decimalNumber) * multiplicand;
-	return abracadabra(currency, productWholeNumber, productDecimal);
+	return createMoney(currency, productWholeNumber, productDecimal);
     }
 
     public Money divide(float dividend) {
 	double productWholeNumber = ((double) wholeNumber) / dividend;
 	double productDecimal = ((double) decimalNumber) / dividend;
-	return abracadabra(currency, productWholeNumber, productDecimal);
+	return createMoney(currency, productWholeNumber, productDecimal);
     }
-     private static Money createMoney(Currency currency,
+
+    private static Money createMoney(Currency currency,
 	    double productWholeNumber, double productDecimal) {
 	double result = createDoubleForm(productWholeNumber, productDecimal);
 	DecimalFormat doubleRep = new DecimalFormat("0.00");
@@ -50,14 +53,15 @@ public class Money {
 	return new Money(currency, whole, decimal);
     }
 
-   private static double createDoubleForm(double productWholeNumber,
+    private static double createDoubleForm(double productWholeNumber,
 	    double productDecimal) {
 	return productWholeNumber + (productDecimal / 100);
     }
-  //////
-   ///PUT YOUR ADD/SUBTRACT STUFF HERE
-  //////
-public Money add(Money addend) {
+
+    // ////
+    // /PUT YOUR ADD/SUBTRACT STUFF HERE
+    // ////
+    public Money add(Money addend) {
 	checkisSameCurrency(addend);
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
@@ -68,14 +72,10 @@ public Money add(Money addend) {
 	return new Money(currency, wholeNumber, decimalNumber);
     }
 
-private static double createDoubleForm(double productWholeNumber,
-	    double productDecimal) {
-	return productWholeNumber + (productDecimal / 100);
-    }
-
     public void checkisSameCurrency(Money money) {
 	if (currency != money.currency) {
-	    String message = concatAll("cannot perform operation on ", currency.toString(), " and ", money.currency.toString());
+	    String message = concatAll("cannot perform operation on ",
+		    currency.toString(), " and ", money.currency.toString());
 	    throw new IncompatibleCurrencyException(message);
 	}
     }
@@ -93,7 +93,7 @@ private static double createDoubleForm(double productWholeNumber,
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
     }
-    
+
     private static String concatAll(String... strings) {
 	StringBuilder newString = new StringBuilder();
 	for (String s : strings) {
