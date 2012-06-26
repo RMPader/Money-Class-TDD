@@ -11,6 +11,18 @@ import currency.exceptions.IncompatibleCurrencyException;
 public class MoneyOperationTest {
 
     @Test
+    public void toStringTests() {
+	Money php = new Money(Currency.PHP, "1.00");
+	Money usd = new Money(Currency.USD, "0.01");
+	Money eur = new Money(Currency.EUR, "-1.00");
+	Money eur2 = new Money(Currency.EUR, "-1.01");
+	assertEquals("PHP 1.00", php.toString());
+	assertEquals("USD 0.01", usd.toString());
+	assertEquals("EUR -1.00", eur.toString());
+	assertEquals("EUR -1.01", eur2.toString());
+    }
+
+    @Test
     public void valueTests() {
 	Money php = new Money(Currency.PHP, "1.00");
 	Money usd = new Money(Currency.USD, "-0.01");
