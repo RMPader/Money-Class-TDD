@@ -111,6 +111,41 @@ public class MoneyOperationTest {
 	augend.subtract(addend);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void divisionByZero() {
+	Money dividend = new Money(Currency.EUR, 1, 0);
+	dividend.divide(0);
+    }
+
+    @Test
+    public void divideByOne() {
+	Money dividend = new Money(Currency.EUR, 23, 10);
+	Money assumedResult = new Money(Currency.EUR, 23, 10);
+	assertTrue(dividend.divide(1).equals(assumedResult));
+    }
+
+    @Test
+    public void multiplyByDecimal()
+    {
+	Money multiplier = new Money(Currency.PHP,1,0);
+	Money result = multiplier.multiply((double).5);
+	Money expected = new Money(Currency.PHP,0,50);
+	assertEquals(expected, result);
+    }
+    @Test
+    public void muliplyByZero() {
+	Money factor = new Money(Currency.USD, 1, 0);
+	Money assumedResult = new Money(Currency.USD, 0, 0);
+	assertTrue(factor.multiply(0).equals(assumedResult));
+    }
+
+    @Test
+    public void muliplyByOne() {
+	Money factor = new Money(Currency.USD, 12, 34);
+	Money assumedResult = new Money(Currency.USD, 12, 34);
+	assertTrue(factor.multiply(1).equals(assumedResult));
+    }
+    
     @Test
     public void nonEqualityTests() {
 	Money php1 = new Money(Currency.PHP, 14, 0);
@@ -164,32 +199,5 @@ public class MoneyOperationTest {
 	assertTrue(money1.equals(money2) && money2.equals(money3)
 		&& money1.equals(money3)
 		&& money1.hashCode() == money3.hashCode());
-    }
-
-    @Test(expected = ArithmeticException.class)
-    public void divisionByZero() {
-	Money dividend = new Money(Currency.EUR, 1, 0);
-	dividend.divide(0);
-    }
-
-    @Test
-    public void divideByOne() {
-	Money dividend = new Money(Currency.EUR, 23, 10);
-	Money assumedResult = new Money(Currency.EUR, 23, 10);
-	assertTrue(dividend.divide(1).equals(assumedResult));
-    }
-
-    @Test
-    public void muliplyByZero() {
-	Money factor = new Money(Currency.USD, 1, 0);
-	Money assumedResult = new Money(Currency.USD, 0, 0);
-	assertTrue(factor.multiply(0).equals(assumedResult));
-    }
-
-    @Test
-    public void muliplyByOne() {
-	Money factor = new Money(Currency.USD, 12, 34);
-	Money assumedResult = new Money(Currency.USD, 12, 34);
-	assertTrue(factor.multiply(1).equals(assumedResult));
     }
 }
