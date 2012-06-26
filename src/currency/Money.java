@@ -1,8 +1,8 @@
 package currency;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
-import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
 public class Money {
@@ -14,76 +14,86 @@ public class Money {
 
     public Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
-	if (wholeNumber == 0) {
-	    hasNegativeValue = (decimalNumber < 0) ? true : false;
-	} else if (wholeNumber < 0) {
+	long sign = wholeNumber * decimalNumber;
+	if(sign < 0){
+	    throw new InvalidMoneyValueException(" both arguments have non-zero values that are different in sign.");
+	} else {
+	if(wholeNumber < 0 || decimalNumber < 0){
 	    hasNegativeValue = true;
-	} else{
+	} else { 
 	    hasNegativeValue = false;
 	}
 	this.currency = currency;
 	this.wholeNumber = wholeNumber;
 	this.decimalNumber = decimalNumber;
+	}
     }
 
     public Money multiply(double multiplicand) {
 	double productWholeNumber = ((double) wholeNumber) * multiplicand;
 	double productDecimal = ((double) decimalNumber) * multiplicand;
-	return abracadabra(currency, productWholeNumber, productDecimal);
+	return createMoney(currency, productWholeNumber, productDecimal);
     }
 
     public Money divide(float dividend) {
+	if (dividend == 0) {
+	    throw new ArithmeticException("Division by zero.");
+	}
 	double productWholeNumber = ((double) wholeNumber) / dividend;
 	double productDecimal = ((double) decimalNumber) / dividend;
-	return abracadabra(currency, productWholeNumber, productDecimal);
+	return createMoney(currency, productWholeNumber, productDecimal);
+
     }
-    
-    //TODO rename this muthafuka
-    private static Money abracadabra(Currency currency, double productWholeNumber, double productDecimal){
-	double product = productWholeNumber + (productDecimal / 100);
-	StringBuilder sb = new StringBuilder(Double.toString(product));
-	int index = sb.indexOf(".");
-	index = index + 3;
-	if (Integer.parseInt(sb.substring(index, index + 1)) >= 5) {
-	    sb.setCharAt(index - 1, Character.forDigit(
-		    Integer.parseInt(sb.substring(index - 1, index)) + 1, 10));
-	}
-	sb.delete(index, sb.length());
+
+    private static Money createMoney(Currency currency,
+	    double productWholeNumber, double productDecimal) {
+	double result = createDoubleForm(productWholeNumber, productDecimal);
+	DecimalFormat doubleRep = new DecimalFormat("0.00");
+	doubleRep.setRoundingMode(RoundingMode.HALF_UP);
+	String sb = doubleRep.format(result);
+	System.out.println(sb);
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
 	return new Money(currency, whole, decimal);
     }
 
-  //////
-   ///PUT YOUR ADD/SUBTRACT STUFF HERE
-  //////
+    private static double createDoubleForm(double productWholeNumber,
+	    double productDecimal) {
+	return productWholeNumber + (productDecimal / 100);
+    }
+
+    //ADD-SUBTRACT
     
-    private static String concatAll(String... strings) {
+    
+    
+    
+    
+    private static StringBuilder concatAll(String... strings) {
 	StringBuilder newString = new StringBuilder();
 	for (String s : strings) {
 	    newString.append(s);
 	}
-	return newString.toString();
+	return newString;
     }
 
     public String getCurrencyType() {
 	return currency.toString();
     }
 
-    public BigDecimal getValue() {
-	String valueString = concatAll(Integer.toString(wholeNumber), ".",
+    public String getValue() {
+	StringBuilder value = concatAll(Integer.toString(wholeNumber), ".",
 		Integer.toString(decimalNumber));
-	BigDecimal bd = new BigDecimal(valueString);
-	return bd;
+	if (decimalNumber < 10) {
+	    value.insert(value.indexOf(".") + 1, '0');
+	}
+	return value.toString();
     }
 
     @Override
     public String toString() {
-	String toReturn = concatAll(currency.toString(), " ",
-		Integer.toString(wholeNumber), ".",
-		Integer.toString(decimalNumber));
-	return toReturn;
+	StringBuilder sb = concatAll(getCurrencyType(), " ", getValue());
+	return sb.toString();
     }
 
     @Override
