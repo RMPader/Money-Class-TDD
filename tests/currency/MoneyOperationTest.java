@@ -20,6 +20,17 @@ public class MoneyOperationTest {
     }
     
     @Test
+    public void valueTests(){
+	Money php = new Money(Currency.PHP, 1, 0);
+	Money usd = new Money(Currency.USD, 0, -1);
+	Money eur = new Money(Currency.EUR, -1, 0);
+	
+	assertTrue(php.getValue().equals("1.00"));
+	assertTrue(usd.getValue().equals("-0.01"));
+	assertTrue(eur.getValue().equals("-1.00"));
+    }
+    
+    @Test
     public void nonEqualityTests(){
 	Money php1 = new Money(Currency.PHP, 14, 0);
 	Money php2 = new Money(Currency.PHP, 14, 2);

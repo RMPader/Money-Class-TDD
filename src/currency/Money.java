@@ -87,6 +87,9 @@ public class Money {
 	if (decimalNumber < 10) {
 	    value.insert(value.indexOf(".") + 1, '0');
 	}
+	if(hasNegativeValue){
+	    value.insert(0, '-');
+	}
 	return value.toString();
     }
 
