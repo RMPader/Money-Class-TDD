@@ -78,7 +78,7 @@ public class MoneyOperationTest {
     @Test
     public void sameCurrencyAddition() {
 	Money augend = new Money(Currency.EUR, "1.20");
-	Money addend = new Money(Currency.EUR, "1.1");
+	Money addend = new Money(Currency.EUR, "1.01");
 	Money result = augend.add(addend);
 	Money expected = new Money(Currency.EUR, "2.21");
 	assertEquals(expected, result);
@@ -101,8 +101,8 @@ public class MoneyOperationTest {
 
     @Test
     public void sameCurrencySubtractionWithBorrowing() {
-	Money minuend = new Money(Currency.USD, "1.3");
-	Money subtrahend = new Money(Currency.USD, "0.50");
+	Money minuend = new Money(Currency.USD, "1.03");
+	Money subtrahend = new Money(Currency.USD, "0.05");
 	Money result = minuend.subtract(subtrahend);
 	Money expected = new Money(Currency.USD, "0.98");
 	assertEquals(expected, result);
@@ -117,7 +117,7 @@ public class MoneyOperationTest {
     @Test
     public void sameCurrencyAdditionWithCarryDecimal() {
 	Money augend = new Money(Currency.PHP, "1.99");
-	Money addend = new Money(Currency.PHP, "1.1");
+	Money addend = new Money(Currency.PHP, "1.01");
 	Money result = augend.add(addend);
 	Money expected = new Money(Currency.PHP, "3.00");
 	assertEquals(expected, result);
