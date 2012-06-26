@@ -31,7 +31,23 @@ public class MoneyOperationTest {
 	assertTrue(usd.getValue().equals("-0.01"));
 	assertTrue(eur.getValue().equals("-1.00"));
     }
+    
+    @Test
+    public void signedAddition()
+    {
+	Money augend = new Money(Currency.EUR, -1, -20);
+	Money addend = new Money(Currency.EUR, 1, 1);
+	Money result = augend.add(addend);
+	Money expected = new Money(Currency.EUR, 0, 19);
+	assertEquals(expected, result);
 
+	augend = new Money(Currency.EUR, 1, 0);
+	addend = new Money(Currency.EUR, -4, 0);
+	result = augend.add(addend);
+	expected = new Money(Currency.EUR, -3, 0);
+	assertEquals(expected, result);
+    }
+    
     @Test
     public void sameCurrencyAddition() {
 	Money augend = new Money(Currency.EUR, 1, 20);
