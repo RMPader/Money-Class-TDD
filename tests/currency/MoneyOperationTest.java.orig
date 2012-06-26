@@ -10,7 +10,7 @@ import currency.Currency;
 import currency.Money;
 import currency.Exceptions.IncompatibleCurrencyException;
 
->>>>>>> added test case for addition and subtraction
+>>>>>>> e70d5bd8d66088e7344319ad14dbf685d26c0192
 public class MoneyOperationTest {
 
     @Test
@@ -25,7 +25,6 @@ public class MoneyOperationTest {
     }
 
     @Test
-<<<<<<< HEAD
     public void valueTests() {
 	Money php = new Money(Currency.PHP, 1, 0);
 	Money usd = new Money(Currency.USD, 0, -1);
@@ -36,7 +35,10 @@ public class MoneyOperationTest {
 	assertTrue(eur.getValue().equals("-1.00"));
     }
 
+<<<<<<< HEAD
+    @Test
 =======
+    @Test
     public void sameCurrencyAddition() {
 	Money augend = new Money(Currency.EUR, 1, 20);
 	Money addend = new Money(Currency.EUR, 1, 1);
@@ -116,9 +118,9 @@ public class MoneyOperationTest {
 	Money addend = new Money(Currency.USD, 1, 1);
 	augend.subtract(addend);
     }
-    
->>>>>>> added test case for addition and subtraction
+
     @Test
+>>>>>>> e70d5bd8d66088e7344319ad14dbf685d26c0192
     public void nonEqualityTests() {
 	Money php1 = new Money(Currency.PHP, 14, 0);
 	Money php2 = new Money(Currency.PHP, 14, 2);

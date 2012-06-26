@@ -10,7 +10,7 @@ public class Money {
 
     private final int decimalNumber;
     private final int wholeNumber;
-    private final boolean hasNegativeValue;
+    private final boolean valueIsNegativeFractional;
     private final Currency currency;
 
     public Money(Currency currency, int wholeNumber, int decimalNumber)
@@ -20,14 +20,14 @@ public class Money {
 	    throw new InvalidMoneyValueException(
 		    " both arguments have non-zero values that are different in sign.");
 	} else {
-	    if (wholeNumber < 0 || decimalNumber < 0) {
-		hasNegativeValue = true;
+	    if (decimalNumber < 0) {
+		valueIsNegativeFractional = true;
 	    } else {
-		hasNegativeValue = false;
+		valueIsNegativeFractional = false;
 	    }
 	    this.currency = currency;
 	    this.wholeNumber = wholeNumber;
-	    this.decimalNumber = decimalNumber;
+	    this.decimalNumber = Math.abs(decimalNumber);
 	}
     }
 
@@ -53,7 +53,6 @@ public class Money {
 	DecimalFormat doubleRep = new DecimalFormat("0.00");
 	doubleRep.setRoundingMode(RoundingMode.HALF_UP);
 	String sb = doubleRep.format(result);
-	System.out.println(sb);
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
@@ -112,13 +111,14 @@ public class Money {
     }
 
     public String getValue() {
-	StringBuilder value = concatAll(Integer.toString(wholeNumber), ".",
-		Integer.toString(decimalNumber));
+	String sign = "";
+	if (valueIsNegativeFractional) {
+	    sign = "-";
+	}
+	StringBuilder value = concatAll(sign, Integer.toString(wholeNumber),
+		".", Integer.toString(decimalNumber));
 	if (decimalNumber < 10) {
 	    value.insert(value.indexOf(".") + 1, '0');
-	}
-	if (hasNegativeValue) {
-	    value.insert(0, '-');
 	}
 	return value.toString();
     }
@@ -136,7 +136,7 @@ public class Money {
 	result = prime * result
 		+ ((currency == null) ? 0 : currency.hashCode());
 	result = prime * result + decimalNumber;
-	result = prime * result + (hasNegativeValue ? 1231 : 1237);
+	result = prime * result + (valueIsNegativeFractional ? 1231 : 1237);
 	result = prime * result + wholeNumber;
 	return result;
     }
@@ -159,7 +159,7 @@ public class Money {
 	if (decimalNumber != other.decimalNumber) {
 	    return false;
 	}
-	if (hasNegativeValue != other.hasNegativeValue) {
+	if (valueIsNegativeFractional != other.valueIsNegativeFractional) {
 	    return false;
 	}
 	if (wholeNumber != other.wholeNumber) {
