@@ -1,9 +1,12 @@
 package currency;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import currency.Currency;
+import currency.Money;
+import currency.Exceptions.IncompatibleCurrencyException;
 
 public class MoneyOperationTest {
 
@@ -19,16 +22,86 @@ public class MoneyOperationTest {
     }
 
     @Test
-    public void valueTests() {
-	Money php = new Money(Currency.PHP, 1, 0);
-	Money usd = new Money(Currency.USD, 0, -1);
-	Money eur = new Money(Currency.EUR, -1, 0);
+    public void sameCurrencyAddition() {
+	Money augend = new Money(Currency.EUR, 1, 20);
+	Money addend = new Money(Currency.EUR, 1, 1);
+	Money result = augend.add(addend);
+	Money expected = new Money(Currency.EUR, 2, 21);
+	assertEquals(expected, result);
 
-	assertTrue(php.getValue().equals("1.00"));
-	assertTrue(usd.getValue().equals("-0.01"));
-	assertTrue(eur.getValue().equals("-1.00"));
+	augend = new Money(Currency.EUR, 1, 0);
+	addend = new Money(Currency.EUR, 4, 0);
+	result = augend.add(addend);
+	expected = new Money(Currency.EUR, 5, 0);
+	assertEquals(expected, result);
     }
 
+    @Test
+    public void sameCurrencySubtraction() {
+	Money minuend = new Money(Currency.USD, 4, 5);
+	Money subtrahend = new Money(Currency.USD, 1, 5);
+	Money result = minuend.subtract(subtrahend);
+	Money expected = new Money(Currency.USD, 3, 0);
+	assertEquals(expected, result);
+    }
+
+    @Test
+    public void sameCurrencySubtractionWithBorrowing() {
+	Money minuend = new Money(Currency.USD, 1, 3);
+	Money subtrahend = new Money(Currency.USD, 0, 5);
+	Money result = minuend.subtract(subtrahend);
+	Money expected = new Money(Currency.USD, 0, 8);
+	assertEquals(expected, result);
+
+	minuend = new Money(Currency.EUR, 1, 10);
+	subtrahend = new Money(Currency.EUR, 0, 11);
+	result = minuend.subtract(subtrahend);
+	expected = new Money(Currency.EUR, 0, 99);
+	assertEquals(expected, result);
+    }
+
+    @Test
+    public void sameCurrencyAdditionWithCarryDecimal() {
+	Money augend = new Money(Currency.PHP, 1, 99);
+	Money addend = new Money(Currency.PHP, 1, 1);
+	Money result = augend.add(addend);
+	Money expected = new Money(Currency.PHP, 3, 0);
+	assertEquals(expected, result);
+
+	augend = new Money(Currency.USD, 1, 99);
+	addend = new Money(Currency.USD, 0, 99);
+	result = augend.add(addend);
+	expected = new Money(Currency.USD, 2, 98);
+	assertEquals(expected, result);
+
+	augend = new Money(Currency.EUR, 0, 50);
+	addend = new Money(Currency.EUR, 0, 50);
+	result = augend.add(addend);
+	expected = new Money(Currency.EUR, 1, 0);
+	assertEquals(expected, result);
+    }
+
+    @Test(expected = IncompatibleCurrencyException.class)
+    public void incompatibleCurrencyAdditionFromUsdToPhp() {
+	Money augend = new Money(Currency.USD, 1, 99);
+	Money addend = new Money(Currency.PHP, 1, 1);
+	augend.add(addend);
+    }
+
+    @Test(expected = IncompatibleCurrencyException.class)
+    public void incompatibleCurrencyAdditionFromEURToPhp() {
+	Money augend = new Money(Currency.EUR, 1, 99);
+	Money addend = new Money(Currency.PHP, 1, 1);
+	augend.add(addend);
+    }
+
+    @Test(expected = IncompatibleCurrencyException.class)
+    public void incompatibleCurrencySubtractionFromEurToUsd() {
+	Money augend = new Money(Currency.EUR, 1, 99);
+	Money addend = new Money(Currency.USD, 1, 1);
+	augend.subtract(addend);
+    }
+    
     @Test
     public void nonEqualityTests() {
 	Money php1 = new Money(Currency.PHP, 14, 0);
