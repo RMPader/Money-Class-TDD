@@ -38,7 +38,6 @@ public class MoneyOperationTest {
     {
 	Money augend = new Money(Currency.EUR, -1, -20);
 	Money addend = new Money(Currency.EUR, 1, 1);
-	System.out.println("a");
 	Money result = augend.add(addend);
 	Money expected = new Money(Currency.EUR, 0, -19);
 	assertEquals(expected, result);
@@ -59,22 +58,22 @@ public class MoneyOperationTest {
     @Test
     public void signedSubtraction()
     {
-	Money augend = new Money(Currency.EUR, -1, -20);
-	Money addend = new Money(Currency.EUR, 1, 1);
-	Money result = augend.subtract(addend);
+	Money minuend = new Money(Currency.EUR, -1, -20);
+	Money subtrahend = new Money(Currency.EUR, 1, 1);
+	Money result = minuend.subtract(subtrahend);
 	Money expected = new Money(Currency.EUR, -2, -21);
 	assertEquals(expected, result);
 
-	augend = new Money(Currency.EUR, 2, 1);
-	addend = new Money(Currency.EUR, -4, -2);
-	result = augend.subtract(addend);
+	minuend = new Money(Currency.EUR, 2, 1);
+	subtrahend = new Money(Currency.EUR, -4, -2);
+	result = minuend.subtract(subtrahend);
 	expected = new Money(Currency.EUR, 6, 3);
 	assertEquals(expected, result);
 	
-	augend = new Money(Currency.EUR, -1, -2);
-	addend = new Money(Currency.EUR, -4, -1);
-	result = augend.subtract(addend);
-	expected = new Money(Currency.EUR, 2, -1);
+	minuend = new Money(Currency.EUR, -5, -9);
+	subtrahend = new Money(Currency.EUR, -6, -1);
+	result = minuend.subtract(subtrahend);
+	expected = new Money(Currency.EUR, 1, 8);
 	assertEquals(expected, result);
     }
     

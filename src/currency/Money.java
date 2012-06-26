@@ -70,7 +70,7 @@ public class Money {
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
-	if(whole==0 && result < 0){
+	if (whole == 0 && result < 0) {
 	    decimal *= -1;
 	}
 	return new Money(currency, whole, decimal);
@@ -86,7 +86,7 @@ public class Money {
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
 	if (decimalNumber >= 100) {
-	    wholeNumber = wholeNumber + (decimalNumber/100);
+	    wholeNumber = wholeNumber + (decimalNumber / 100);
 	    decimalNumber = decimalNumber % 100;
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
@@ -105,12 +105,18 @@ public class Money {
 	checkisSameCurrency(subtrahend);
 	int wholeNumber = this.wholeNumber - subtrahend.wholeNumber;
 	int decimalNumber = this.decimalNumber - subtrahend.decimalNumber;
-	if (decimalNumber < 0) {
-	    int borrow = 100;
-	    if (this.decimalNumber < 10)
-		borrow = 10;
-	    wholeNumber--;
-	    decimalNumber = Math.abs(decimalNumber + borrow);
+	if (this.decimalNumber > 0 || this.decimalNumber > 0
+		&& subtrahend.decimalNumber > 0) {
+	    if (decimalNumber < 0) {
+		int borrow = 100;
+		if (this.decimalNumber < 10)
+		    borrow = 10;
+		wholeNumber--;
+		decimalNumber = Math.abs(decimalNumber + borrow);
+	    }
+	}
+	if (wholeNumber > 0 && decimalNumber < 0) {
+	    decimalNumber *= -1;
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
     }
@@ -130,11 +136,13 @@ public class Money {
     public String getValue() {
 	StringBuilder value;
 	if (valueIsNegativeFractional) {
-	    value = concatAll("-",Integer.toString(wholeNumber),".", Integer.toString(Math.abs(decimalNumber)));
+	    value = concatAll("-", Integer.toString(wholeNumber), ".",
+		    Integer.toString(Math.abs(decimalNumber)));
 	} else {
-	    value = concatAll(Integer.toString(wholeNumber),".", Integer.toString(Math.abs(decimalNumber)));
+	    value = concatAll(Integer.toString(wholeNumber), ".",
+		    Integer.toString(Math.abs(decimalNumber)));
 	}
-	if (decimalNumber < 10) {
+	if (Math.abs(decimalNumber) < 10) {
 	    value.insert(value.indexOf(".") + 1, '0');
 	}
 	return value.toString();
