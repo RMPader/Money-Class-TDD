@@ -12,54 +12,54 @@ public class MoneyOperationTest {
 
     @Test
     public void toStringTests() {
-	Money php = new Money(Currency.PHP, 1, 0);
-	Money usd = new Money(Currency.USD, 0, 1);
-	Money eur = new Money(Currency.EUR, -1, 0);
-	Money eur2 = new Money(Currency.EUR, -1, -1);
-	assertTrue(php.toString().equals("PHP 1.00"));
-	assertTrue(usd.toString().equals("USD 0.01"));
-	assertTrue(eur.toString().equals("EUR -1.00"));
-	assertEquals(eur2.toString(),"EUR -1.01");
+	Money php = new Money(Currency.PHP, "1.00");
+	Money usd = new Money(Currency.USD, "0.01");
+	Money eur = new Money(Currency.EUR, "-1.00");
+	Money eur2 = new Money(Currency.EUR, "-1.01");
+	assertEquals("PHP 1.00",php.toString());
+	assertEquals("USD 0.01",usd.toString());
+	assertEquals("EUR -1.00",eur.toString());
+	assertEquals("EUR -1.01",eur2.toString());
     }
 
     @Test
     public void valueTests() {
-	Money php = new Money(Currency.PHP, 1, 0);
-	Money usd = new Money(Currency.USD, 0, -1);
-	Money eur = new Money(Currency.EUR, -1, 0);
+	Money php = new Money(Currency.PHP, "1.00");
+	Money usd = new Money(Currency.USD, "-0.01");
+	Money eur = new Money(Currency.EUR, "-1.00");
 
-	assertTrue(php.getValue().equals("1.00"));
-	assertEquals(usd.getValue(),("-0.01"));
-	assertEquals(eur.getValue(),("-1.00"));
+	assertEquals("1.00",php.getValue());
+	assertEquals("-0.01",usd.getValue());
+	assertEquals("-1.00",eur.getValue());
     }
     
     @Test
     public void signedAddition()
     {
-	Money augend = new Money(Currency.EUR, -1, -20);
-	Money addend = new Money(Currency.EUR, 1, 1);
+	Money augend = new Money(Currency.EUR, "-1.20");
+	Money addend = new Money(Currency.EUR, "1.01");
 	Money result = augend.add(addend);
-	Money expected = new Money(Currency.EUR, 0, -19);
+	Money expected = new Money(Currency.EUR, "-0.19");
 	assertEquals(expected, result);
 
-	augend = new Money(Currency.EUR, 2, 1);
-	addend = new Money(Currency.EUR, -4, -2);
+	augend = new Money(Currency.EUR, "2.01");
+	addend = new Money(Currency.EUR, "-4.01");
 	result = augend.add(addend);
-	expected = new Money(Currency.EUR, -2, -1);
+	expected = new Money(Currency.EUR, "-2.00");
 	assertEquals(expected, result);
 	
-	augend = new Money(Currency.EUR, -1, -2);
-	addend = new Money(Currency.EUR, -4, -1);
+	augend = new Money(Currency.EUR, "1.99");
+	addend = new Money(Currency.EUR, "4.21");
 	result = augend.add(addend);
-	expected = new Money(Currency.EUR, -5, -3);
+	expected = new Money(Currency.EUR, "6.20");
 	assertEquals(expected, result);
     }
     
     @Test
     public void signedSubtraction()
     {
-	Money minuend = new Money(Currency.EUR, -1, -20);
-	Money subtrahend = new Money(Currency.EUR, 1, 1);
+	Money minuend = new Money(Currency.EUR, "-1.20");
+	Money subtrahend = new Money(Currency.EUR, "1.01");
 	Money result = minuend.subtract(subtrahend);
 	Money expected = new Money(Currency.EUR, -2, -21);
 	assertEquals(expected, result);

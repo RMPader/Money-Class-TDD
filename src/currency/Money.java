@@ -14,7 +14,22 @@ public class Money {
     private final boolean valueIsNegativeFractional;
     private final Currency currency;
 
-    public Money(Currency currency, int wholeNumber, int decimalNumber)
+    public Money(Currency currency, String value) {
+	this.currency = currency;
+	this.wholeNumber = extractWholeNumber(value);
+	int decimal = extractDecimalNumber(value);
+	if(value.charAt(0)=='-'){
+	    decimal *= -1;
+	}
+	this.decimalNumber = decimal;
+	if (value.charAt(0) == '-' && wholeNumber == 0) {
+	    valueIsNegativeFractional = true;
+	} else {
+	    valueIsNegativeFractional = false;
+	}
+    }
+
+    private Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
 	checkDecimalOutOfRange(decimalNumber);
 	checkSimilarSign(wholeNumber, decimalNumber);
@@ -26,6 +41,59 @@ public class Money {
 	this.currency = currency;
 	this.wholeNumber = wholeNumber;
 	this.decimalNumber = decimalNumber;
+    }
+
+    private static final int MONEY_VALUE_WHOLE_NUMBER_INDEX = 0;
+    private static final int MONEY_VALUE_DECIMAL_NUMBER_INDEX = 1;
+    private static final int DECIMAL_PRECISION = 2;
+
+    private static final int MONEY_CURRENCY_INDEX = 0;
+    private static final int MONEY_VALUE_INDEX = 1;
+
+    private static StringBuilder createMoneyTypeExceptionMessage(
+	    String suspectString) {
+	StringBuilder errorMessage = new StringBuilder(suspectString);
+	errorMessage.append(", type can only be ");
+	return appendCurrencyTypes(errorMessage);
+    }
+
+    private static StringBuilder appendCurrencyTypes(StringBuilder errorMessage) {
+	for (Currency type : Currency.values()) {
+	    errorMessage.append(type.toString());
+	    errorMessage.append(",");
+	}
+	return errorMessage.append(".");
+    }
+
+    private static int extractWholeNumber(String valuePart) {
+	String splitValue[] = valuePart.split("\\.");
+	if (splitValue.length > 2) {
+	    throw new InvalidMoneyValueException(valuePart
+		    + ": input has many decimal points");
+	}
+	return Integer.parseInt(splitValue[MONEY_VALUE_WHOLE_NUMBER_INDEX]);
+    }
+
+    private static int extractDecimalNumber(String valuePart) {
+	String decimalFromInput = extractDecimalFromInput(valuePart);
+	if (decimalPrecisionIsMoreThanTwo(decimalFromInput)) {
+	    throw new InvalidMoneyValueException(valuePart
+		    + " has higher precision. Expected is 2 (e.g 1.00, 30.01)");
+	}
+	return Integer.parseInt(decimalFromInput);
+    }
+
+    private static String extractDecimalFromInput(String value) {
+	String[] splitValue = value.split("\\.");
+	String decimalFromInput = splitValue[MONEY_VALUE_DECIMAL_NUMBER_INDEX];
+	if (decimalFromInput.length() == 1) {
+	    decimalFromInput = decimalFromInput + "0";
+	}
+	return decimalFromInput;
+    }
+
+    private static boolean decimalPrecisionIsMoreThanTwo(String decimalNumber) {
+	return decimalNumber.length() > DECIMAL_PRECISION;
     }
 
     private void checkDecimalOutOfRange(int decimalNumber) {
@@ -105,19 +173,8 @@ public class Money {
 	checkisSameCurrency(subtrahend);
 	int wholeNumber = this.wholeNumber - subtrahend.wholeNumber;
 	int decimalNumber = this.decimalNumber - subtrahend.decimalNumber;
-	if (this.decimalNumber > 0 || this.decimalNumber > 0
-		&& subtrahend.decimalNumber > 0) {
-	    if (decimalNumber < 0) {
-		int borrow = 100;
-		if (this.decimalNumber < 10)
-		    borrow = 10;
-		wholeNumber--;
-		decimalNumber = Math.abs(decimalNumber + borrow);
-	    }
-	}
-	if (wholeNumber > 0 && decimalNumber < 0) {
-	    decimalNumber *= -1;
-	}
+	decimalNumber *= -1;
+	System.out.println(wholeNumber + "." + decimalNumber);
 	return new Money(currency, wholeNumber, decimalNumber);
     }
 
