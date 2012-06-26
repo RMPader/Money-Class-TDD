@@ -3,7 +3,6 @@ package currency;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
-import currency.exceptions.DecimalInputOutOfRange;
 import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
@@ -11,41 +10,30 @@ public class Money {
     private static final int MONEY_VALUE_WHOLE_NUMBER_INDEX = 0;
     private static final int MONEY_VALUE_DECIMAL_NUMBER_INDEX = 1;
     private static final int DECIMAL_PRECISION = 2;
-    
+
     private final int decimalNumber;
     private final int wholeNumber;
-    private final boolean valueIsNegativeFractional;
     private final Currency currency;
+    private final boolean valueIsNegativeFractional;
 
     public Money(Currency currency, String value) {
 	this.currency = currency;
 	this.wholeNumber = extractWholeNumber(value);
 	this.decimalNumber = extractDecimalNumber(value);
-	if (value.charAt(0) == '-' && wholeNumber == 0) {
-	    valueIsNegativeFractional = true;
-	} else {
-	    valueIsNegativeFractional = false;
-	}
+	this.valueIsNegativeFractional = 
+		(value.charAt(0) == '-' && wholeNumber == 0) ? true: false;
     }
 
-    private Money(Currency currency, int wholeNumber, int decimalNumber)
-	    throws InvalidMoneyValueException {
-	if (decimalNumber < 0 && wholeNumber == 0) {
-	    valueIsNegativeFractional = true;
-	} else {
-	    valueIsNegativeFractional = false;
-	}
+    private Money(Currency currency, int wholeNumber, int decimalNumber) {
 	this.currency = currency;
 	this.wholeNumber = wholeNumber;
 	this.decimalNumber = decimalNumber;
+	this.valueIsNegativeFractional = 
+		(decimalNumber < 0 && wholeNumber == 0) ? true: false;
     }
 
     private static int extractWholeNumber(String valuePart) {
 	String splitValue[] = valuePart.split("\\.");
-	if (splitValue.length > 2) {
-	    throw new InvalidMoneyValueException(valuePart
-		    + ": input has many decimal points");
-	}
 	return Integer.parseInt(splitValue[MONEY_VALUE_WHOLE_NUMBER_INDEX]);
     }
 
@@ -55,10 +43,7 @@ public class Money {
 	    throw new InvalidMoneyValueException(valuePart
 		    + " has higher precision. Expected is 2 (e.g 1.00, 30.01)");
 	}
-	int decimal = Integer.parseInt(decimalFromInput);
-	if(valuePart.charAt(0)=='-'){
-	    decimal *= -1;
-	}
+	int decimal = transformDecimal(valuePart.charAt(0),decimalFromInput);
 	return decimal;
     }
 
@@ -71,11 +56,16 @@ public class Money {
 	return decimalFromInput;
     }
 
+    private static int transformDecimal(char sign, String decimalString){
+	int decimal = Integer.parseInt(decimalString);
+	if (sign == '-') {
+	    decimal *= -1;
+	}
+	return decimal;
+    }
     private static boolean decimalPrecisionIsMoreThanTwo(String decimalNumber) {
 	return decimalNumber.length() > DECIMAL_PRECISION;
     }
-
-    
 
     public Money multiply(double multiplicand) {
 	double productWholeNumber = ((double) wholeNumber) * multiplicand;
@@ -117,7 +107,7 @@ public class Money {
 	checkisSameCurrency(addend);
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
-	if (decimalNumber >= 100) {
+	if (Math.abs(decimalNumber) >= 100) {
 	    wholeNumber = wholeNumber + (decimalNumber / 100);
 	    decimalNumber = decimalNumber % 100;
 	}
