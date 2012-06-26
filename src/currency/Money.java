@@ -17,7 +17,7 @@ public class Money {
     public Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
 	checkDecimalOutOfRange(decimalNumber);
-	checkSimilarSign(wholeNumber,decimalNumber);
+	checkSimilarSign(wholeNumber, decimalNumber);
 	if (decimalNumber < 0) {
 	    valueIsNegativeFractional = true;
 	} else {
@@ -36,8 +36,8 @@ public class Money {
 	    throw new DecimalInputOutOfRange(message.toString());
 	}
     }
-    
-    private void checkSimilarSign(int whole, int decimal){
+
+    private void checkSimilarSign(int whole, int decimal) {
 	long sign = wholeNumber * decimalNumber;
 	if (sign < 0) {
 	    throw new InvalidMoneyValueException(
@@ -70,7 +70,8 @@ public class Money {
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
-	if(whole==0 && result < 0){
+
+	if (whole == 0 && result < 0) {
 	    decimal *= -1;
 	}
 	return new Money(currency, whole, decimal);
