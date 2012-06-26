@@ -18,14 +18,14 @@ public class Money {
 	    throws InvalidMoneyValueException {
 	checkDecimalOutOfRange(decimalNumber);
 	checkSimilarSign(wholeNumber, decimalNumber);
-	if (decimalNumber < 0) {
+	if (decimalNumber < 0 && wholeNumber == 0) {
 	    valueIsNegativeFractional = true;
 	} else {
 	    valueIsNegativeFractional = false;
 	}
 	this.currency = currency;
 	this.wholeNumber = wholeNumber;
-	this.decimalNumber = Math.abs(decimalNumber);
+	this.decimalNumber = decimalNumber;
     }
 
     private void checkDecimalOutOfRange(int decimalNumber) {
@@ -86,8 +86,8 @@ public class Money {
 	int wholeNumber = this.wholeNumber + addend.wholeNumber;
 	int decimalNumber = this.decimalNumber + addend.decimalNumber;
 	if (decimalNumber >= 100) {
-	    wholeNumber++;
-	    decimalNumber %= 100;
+	    wholeNumber = wholeNumber + (decimalNumber/100);
+	    decimalNumber = decimalNumber % 100;
 	}
 	return new Money(currency, wholeNumber, decimalNumber);
     }
@@ -128,12 +128,12 @@ public class Money {
     }
 
     public String getValue() {
-	String sign = "";
+	StringBuilder value;
 	if (valueIsNegativeFractional) {
-	    sign = "-";
+	    value = concatAll("-",Integer.toString(wholeNumber),".", Integer.toString(Math.abs(decimalNumber)));
+	} else {
+	    value = concatAll(Integer.toString(wholeNumber),".", Integer.toString(Math.abs(decimalNumber)));
 	}
-	StringBuilder value = concatAll(sign, Integer.toString(wholeNumber),
-		".", Integer.toString(decimalNumber));
 	if (decimalNumber < 10) {
 	    value.insert(value.indexOf(".") + 1, '0');
 	}
