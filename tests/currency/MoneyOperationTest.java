@@ -61,86 +61,86 @@ public class MoneyOperationTest {
 	Money minuend = new Money(Currency.EUR, "-1.20");
 	Money subtrahend = new Money(Currency.EUR, "1.01");
 	Money result = minuend.subtract(subtrahend);
-	Money expected = new Money(Currency.EUR, -2, -21);
+	Money expected = new Money(Currency.EUR, "-2.21");
 	assertEquals(expected, result);
 
-	minuend = new Money(Currency.EUR, 2, 1);
-	subtrahend = new Money(Currency.EUR, -4, -2);
+	minuend = new Money(Currency.EUR, "2.01");
+	subtrahend = new Money(Currency.EUR, "-4.02");
 	result = minuend.subtract(subtrahend);
-	expected = new Money(Currency.EUR, 6, 3);
+	expected = new Money(Currency.EUR, "6.03");
 	assertEquals(expected, result);
 	
-	minuend = new Money(Currency.EUR, -5, -9);
-	subtrahend = new Money(Currency.EUR, -6, -1);
+	minuend = new Money(Currency.EUR, "-5.09");
+	subtrahend = new Money(Currency.EUR, "-6.01");
 	result = minuend.subtract(subtrahend);
-	expected = new Money(Currency.EUR, 0, 92);
+	expected = new Money(Currency.EUR, "0.92");
 	assertEquals(expected, result);
     }
     
     @Test
     public void sameCurrencyAddition() {
-	Money augend = new Money(Currency.EUR, 1, 20);
-	Money addend = new Money(Currency.EUR, 1, 1);
+	Money augend = new Money(Currency.EUR, "1.20");
+	Money addend = new Money(Currency.EUR, "1.01");
 	Money result = augend.add(addend);
-	Money expected = new Money(Currency.EUR, 2, 21);
+	Money expected = new Money(Currency.EUR, "2.21");
 	assertEquals(expected, result);
 
-	augend = new Money(Currency.EUR, 1, 0);
-	addend = new Money(Currency.EUR, 4, 0);
+	augend = new Money(Currency.EUR, "1.00");
+	addend = new Money(Currency.EUR, "4.00");
 	result = augend.add(addend);
-	expected = new Money(Currency.EUR, 5, 0);
+	expected = new Money(Currency.EUR, "5.00");
 	assertEquals(expected, result);
     }
 
     @Test
     public void sameCurrencySubtraction() {
-	Money minuend = new Money(Currency.USD, 4, 5);
-	Money subtrahend = new Money(Currency.USD, 1, 5);
+	Money minuend = new Money(Currency.USD, "4.05");
+	Money subtrahend = new Money(Currency.USD, "1.05");
 	Money result = minuend.subtract(subtrahend);
-	Money expected = new Money(Currency.USD, 3, 0);
+	Money expected = new Money(Currency.USD, "3.00");
 	assertEquals(expected, result);
     }
 
     @Test
     public void sameCurrencySubtractionWithBorrowing() {
-	Money minuend = new Money(Currency.USD, 1, 3);
-	Money subtrahend = new Money(Currency.USD, 0, 5);
+	Money minuend = new Money(Currency.USD, "1.03");
+	Money subtrahend = new Money(Currency.USD, "0.05");
 	Money result = minuend.subtract(subtrahend);
-	Money expected = new Money(Currency.USD, 0, 98);
+	Money expected = new Money(Currency.USD, "0.98");
 	assertEquals(expected, result);
 
-	minuend = new Money(Currency.EUR, 1, 10);
-	subtrahend = new Money(Currency.EUR, 0, 11);
+	minuend = new Money(Currency.EUR, "1.10");
+	subtrahend = new Money(Currency.EUR, "0.11");
 	result = minuend.subtract(subtrahend);
-	expected = new Money(Currency.EUR, 0, 99);
+	expected = new Money(Currency.EUR, "0.99");
 	assertEquals(expected, result);
     }
 
     @Test
     public void sameCurrencyAdditionWithCarryDecimal() {
-	Money augend = new Money(Currency.PHP, 1, 99);
-	Money addend = new Money(Currency.PHP, 1, 1);
+	Money augend = new Money(Currency.PHP, "1.99");
+	Money addend = new Money(Currency.PHP, "1.01");
 	Money result = augend.add(addend);
-	Money expected = new Money(Currency.PHP, 3, 0);
+	Money expected = new Money(Currency.PHP, "3.00");
 	assertEquals(expected, result);
 
-	augend = new Money(Currency.USD, 1, 99);
-	addend = new Money(Currency.USD, 0, 99);
+	augend = new Money(Currency.USD, "1.99");
+	addend = new Money(Currency.USD, "0.99");
 	result = augend.add(addend);
-	expected = new Money(Currency.USD, 2, 98);
+	expected = new Money(Currency.USD, "2.98");
 	assertEquals(expected, result);
 
-	augend = new Money(Currency.EUR, 0, 50);
-	addend = new Money(Currency.EUR, 0, 50);
+	augend = new Money(Currency.EUR, "0.50");
+	addend = new Money(Currency.EUR, "0.50");
 	result = augend.add(addend);
-	expected = new Money(Currency.EUR, 1, 0);
+	expected = new Money(Currency.EUR, "1.00");
 	assertEquals(expected, result);
     }
 
     @Test(expected = IncompatibleCurrencyException.class)
     public void incompatibleCurrencyAdditionFromUsdToPhp() {
-	Money augend = new Money(Currency.USD, 1, 99);
-	Money addend = new Money(Currency.PHP, 1, 1);
+	Money augend = new Money(Currency.USD, "1.99");
+	Money addend = new Money(Currency.PHP, "1.01");
 	augend.add(addend);
     }
 

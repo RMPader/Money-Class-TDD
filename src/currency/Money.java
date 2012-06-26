@@ -8,7 +8,10 @@ import currency.exceptions.IncompatibleCurrencyException;
 import currency.exceptions.InvalidMoneyValueException;
 
 public class Money {
-
+    private static final int MONEY_VALUE_WHOLE_NUMBER_INDEX = 0;
+    private static final int MONEY_VALUE_DECIMAL_NUMBER_INDEX = 1;
+    private static final int DECIMAL_PRECISION = 2;
+    
     private final int decimalNumber;
     private final int wholeNumber;
     private final boolean valueIsNegativeFractional;
@@ -17,11 +20,7 @@ public class Money {
     public Money(Currency currency, String value) {
 	this.currency = currency;
 	this.wholeNumber = extractWholeNumber(value);
-	int decimal = extractDecimalNumber(value);
-	if(value.charAt(0)=='-'){
-	    decimal *= -1;
-	}
-	this.decimalNumber = decimal;
+	this.decimalNumber = extractDecimalNumber(value);
 	if (value.charAt(0) == '-' && wholeNumber == 0) {
 	    valueIsNegativeFractional = true;
 	} else {
@@ -31,8 +30,6 @@ public class Money {
 
     private Money(Currency currency, int wholeNumber, int decimalNumber)
 	    throws InvalidMoneyValueException {
-	checkDecimalOutOfRange(decimalNumber);
-	checkSimilarSign(wholeNumber, decimalNumber);
 	if (decimalNumber < 0 && wholeNumber == 0) {
 	    valueIsNegativeFractional = true;
 	} else {
@@ -42,10 +39,6 @@ public class Money {
 	this.wholeNumber = wholeNumber;
 	this.decimalNumber = decimalNumber;
     }
-
-    private static final int MONEY_VALUE_WHOLE_NUMBER_INDEX = 0;
-    private static final int MONEY_VALUE_DECIMAL_NUMBER_INDEX = 1;
-    private static final int DECIMAL_PRECISION = 2;
 
     private static int extractWholeNumber(String valuePart) {
 	String splitValue[] = valuePart.split("\\.");
@@ -62,7 +55,11 @@ public class Money {
 	    throw new InvalidMoneyValueException(valuePart
 		    + " has higher precision. Expected is 2 (e.g 1.00, 30.01)");
 	}
-	return Integer.parseInt(decimalFromInput);
+	int decimal = Integer.parseInt(decimalFromInput);
+	if(valuePart.charAt(0)=='-'){
+	    decimal *= -1;
+	}
+	return decimal;
     }
 
     private static String extractDecimalFromInput(String value) {
@@ -78,22 +75,7 @@ public class Money {
 	return decimalNumber.length() > DECIMAL_PRECISION;
     }
 
-    private void checkDecimalOutOfRange(int decimalNumber) {
-	if (decimalNumber >= 100) {
-	    StringBuilder message = concatAll("invalid decimal: ",
-		    String.valueOf(decimalNumber),
-		    " must be within range of 1 to 99");
-	    throw new DecimalInputOutOfRange(message.toString());
-	}
-    }
-
-    private void checkSimilarSign(int whole, int decimal) {
-	long sign = wholeNumber * decimalNumber;
-	if (sign < 0) {
-	    throw new InvalidMoneyValueException(
-		    " both arguments have non-zero values that are different in sign.");
-	}
-    }
+    
 
     public Money multiply(double multiplicand) {
 	double productWholeNumber = ((double) wholeNumber) * multiplicand;
