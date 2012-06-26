@@ -70,8 +70,7 @@ public class Money {
 	int whole = Integer.parseInt(sb.substring(0, sb.indexOf(".")));
 	int decimal = Integer.parseInt(sb.substring(sb.indexOf(".") + 1,
 		sb.length()));
-
-	if (whole == 0 && result < 0) {
+	if(whole==0 && result < 0){
 	    decimal *= -1;
 	}
 	return new Money(currency, whole, decimal);
