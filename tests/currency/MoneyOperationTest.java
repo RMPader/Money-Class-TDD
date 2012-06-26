@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import currency.Currency;
-import currency.Money;
 import currency.Exceptions.IncompatibleCurrencyException;
 
 public class MoneyOperationTest {
