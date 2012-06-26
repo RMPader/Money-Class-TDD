@@ -15,10 +15,11 @@ public class MoneyOperationTest {
 	Money php = new Money(Currency.PHP, 1, 0);
 	Money usd = new Money(Currency.USD, 0, 1);
 	Money eur = new Money(Currency.EUR, -1, 0);
-
+	Money eur2 = new Money(Currency.EUR, -1, -1);
 	assertTrue(php.toString().equals("PHP 1.00"));
 	assertTrue(usd.toString().equals("USD 0.01"));
 	assertTrue(eur.toString().equals("EUR -1.00"));
+	assertEquals(eur2.toString(),"EUR -1.01");
     }
 
     @Test
@@ -28,8 +29,8 @@ public class MoneyOperationTest {
 	Money eur = new Money(Currency.EUR, -1, 0);
 
 	assertTrue(php.getValue().equals("1.00"));
-	assertTrue(usd.getValue().equals("-0.01"));
-	assertTrue(eur.getValue().equals("-1.00"));
+	assertEquals(usd.getValue(),("-0.01"));
+	assertEquals(eur.getValue(),("-1.00"));
     }
     
     @Test
@@ -37,6 +38,7 @@ public class MoneyOperationTest {
     {
 	Money augend = new Money(Currency.EUR, -1, -20);
 	Money addend = new Money(Currency.EUR, 1, 1);
+	System.out.println("a");
 	Money result = augend.add(addend);
 	Money expected = new Money(Currency.EUR, 0, -19);
 	assertEquals(expected, result);
